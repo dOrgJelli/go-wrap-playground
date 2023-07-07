@@ -1,0 +1,7 @@
+type Module {
+  calcPriceImpactWithAmount(
+    spotPriceBefore: String!
+    tokenAmount: String!
+    priceImpact: String!
+  ): String!
+}

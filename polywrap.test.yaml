@@ -1,0 +1,11 @@
+name: run-test-wrapper
+format: 0.2.0
+jobs:
+  cases:
+    steps:
+    - uri: file/./build
+      method: calcPriceImpactWithAmount
+      args:
+        spotPriceBefore: "15345"
+        tokenAmount: "53234223"
+        priceImpact: "12432"

@@ -57,7 +57,7 @@ def snip_unwanted_exports(wasm_module_path, export_functions):
     subprocess.run(['wasm-snip', wasm_module_path, '-o', wasm_module_path, *export_functions], check=True)
 
 def optimize_wasm(wasm_module_path):
-    subprocess.run(['wasm-opt', "-O4", wasm_module_path, '-o', wasm_module_path], check=True)
+    subprocess.run(['wasm-opt', "-Os", wasm_module_path, '-o', wasm_module_path], check=True)
 
 def main():
     print("Building wasm module...")

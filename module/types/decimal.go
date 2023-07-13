@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 )
+import wrap "github.com/polywrap/go-wrap/wrap"
 
 // NOTE: never use new(Dec) or else we will panic unmarshalling into the
 // nil embedded big.Int
@@ -31,8 +32,8 @@ const (
 )
 
 var (
-	precisionReuse       = new(big.Int).Exp(big.NewInt(10), big.NewInt(Precision), nil)
-	fivePrecision        = new(big.Int).Quo(precisionReuse, big.NewInt(2))
+	// precisionReuse       = new(big.Int).Exp(big.NewInt(10), big.NewInt(Precision), nil)
+	// fivePrecision        = new(big.Int).Quo(precisionReuse, big.NewInt(2))
 	precisionMultipliers []*big.Int
 	zeroInt              = big.NewInt(0)
 	oneInt               = big.NewInt(1)
@@ -46,6 +47,15 @@ var (
 	ErrInvalidDecimalStr    = errors.New("invalid decimal string")
 )
 
+func PrecisionReuse() *big.Int {
+	return new(big.Int).Exp(big.NewInt(10), big.NewInt(Precision), nil)
+}
+
+func FivePrecision() *big.Int {
+	return new(big.Int).Quo(PrecisionReuse(), big.NewInt(2))
+}
+
+
 // Set precision multipliers
 func init() {
 	precisionMultipliers = make([]*big.Int, Precision+1)
@@ -55,7 +65,7 @@ func init() {
 }
 
 func precisionInt() *big.Int {
-	return new(big.Int).Set(precisionReuse)
+	return new(big.Int).Set(PrecisionReuse())
 }
 
 func ZeroDec() Dec     { return Dec{new(big.Int).Set(zeroInt)} }
@@ -240,7 +250,7 @@ func (d Dec) ImmutOpInt64(op func(Dec, int64) Dec, d2 int64) Dec {
 
 func (d Dec) SetInt64(i int64) Dec {
 	d.i.SetInt64(i)
-	d.i.Mul(d.i, precisionReuse)
+	d.i.Mul(d.i, PrecisionReuse())
 	return d
 }
 
@@ -281,8 +291,10 @@ func (d Dec) Mul(d2 Dec) Dec {
 
 // mutable multiplication
 func (d Dec) MulMut(d2 Dec) Dec {
+	wrap.WrapDebugLog(d.i.String())
 	d.i.Mul(d.i, d2.i)
 	chopped := chopPrecisionAndRound(d.i)
+	wrap.WrapDebugLog("chopPrecisionAndRound Working")
 
 	if chopped.BitLen() > maxDecBitLen {
 		panic("Int overflow")
@@ -358,8 +370,8 @@ func (d Dec) Quo(d2 Dec) Dec {
 // mutable quotient
 func (d Dec) QuoMut(d2 Dec) Dec {
 	// multiply precision twice
-	d.i.Mul(d.i, precisionReuse)
-	d.i.Mul(d.i, precisionReuse)
+	d.i.Mul(d.i, PrecisionReuse())
+	d.i.Mul(d.i, PrecisionReuse())
 	d.i.Quo(d.i, d2.i)
 
 	chopPrecisionAndRound(d.i)
@@ -377,8 +389,8 @@ func (d Dec) QuoTruncate(d2 Dec) Dec {
 // mutable quotient truncate
 func (d Dec) QuoTruncateMut(d2 Dec) Dec {
 	// multiply precision twice
-	d.i.Mul(d.i, precisionReuse)
-	d.i.Mul(d.i, precisionReuse)
+	d.i.Mul(d.i, PrecisionReuse())
+	d.i.Mul(d.i, PrecisionReuse())
 	d.i.Quo(d.i, d2.i)
 
 	chopPrecisionAndTruncate(d.i)
@@ -396,8 +408,8 @@ func (d Dec) QuoRoundUp(d2 Dec) Dec {
 // mutable quotient, round up
 func (d Dec) QuoRoundupMut(d2 Dec) Dec {
 	// multiply precision twice
-	d.i.Mul(d.i, precisionReuse)
-	d.i.Mul(d.i, precisionReuse)
+	d.i.Mul(d.i, PrecisionReuse())
+	d.i.Mul(d.i, PrecisionReuse())
 	d.i.Quo(d.i, d2.i)
 
 	chopPrecisionAndRoundUp(d.i)
@@ -506,7 +518,7 @@ func (d Dec) ApproxSqrt() (Dec, error) {
 
 // is integer, e.g. decimals are zero
 func (d Dec) IsInteger() bool {
-	return new(big.Int).Rem(d.i, precisionReuse).Sign() == 0
+	return new(big.Int).Rem(d.i, PrecisionReuse()).Sign() == 0
 }
 
 // format decimal state
@@ -599,24 +611,35 @@ func (d Dec) MustFloat64() float64 {
 //
 // Mutates the input. Use the non-mutative version if that is undesired
 func chopPrecisionAndRound(d *big.Int) *big.Int {
+	wrap.WrapDebugLog("Hello chopPrecisionAndRound")
 	// remove the negative and add it back when returning
 	if d.Sign() == -1 {
 		// make d positive, compute chopped value, and then un-mutate d
+		wrap.WrapDebugLog("chopPrecisionAndRound: d is negative")
 		d = d.Neg(d)
 		d = chopPrecisionAndRound(d)
 		d = d.Neg(d)
 		return d
 	}
 
+	wrap.WrapDebugLog("Hello QuoRem")
+
 	// get the truncated quotient and remainder
 	quo, rem := d, big.NewInt(0)
-	quo, rem = quo.QuoRem(d, precisionReuse, rem)
+	wrap.WrapDebugLog("Quo " + quo.String())
+	wrap.WrapDebugLog("Rem " + rem.String())
+	
+	wrap.WrapDebugLog(fmt.Sprintf("type of quo %T, d %T, rem %T, PrecisionReuse() %T", quo, d, rem, PrecisionReuse()))
+	wrap.WrapDebugLog(fmt.Sprintf("type of quo %s, d %s, rem %s, PrecisionReuse() %s", quo.String(), d.String(), rem.String(), PrecisionReuse().String()))
+	quo, rem = quo.QuoRem(d, PrecisionReuse(), rem)
+	wrap.WrapDebugLog("Quo " + quo.String())
+	wrap.WrapDebugLog("Rem " + rem.String())
 
 	if rem.Sign() == 0 { // remainder is zero
 		return quo
 	}
 
-	switch rem.Cmp(fivePrecision) {
+	switch rem.Cmp(FivePrecision()) {
 	case -1:
 		return quo
 	case 1:
@@ -643,7 +666,7 @@ func chopPrecisionAndRoundUp(d *big.Int) *big.Int {
 
 	// get the truncated quotient and remainder
 	quo, rem := d, big.NewInt(0)
-	quo, rem = quo.QuoRem(d, precisionReuse, rem)
+	quo, rem = quo.QuoRem(d, PrecisionReuse(), rem)
 
 	if rem.Sign() == 0 { // remainder is zero
 		return quo
@@ -674,7 +697,7 @@ func (d Dec) RoundInt() Int {
 // chopPrecisionAndTruncate is similar to chopPrecisionAndRound,
 // but always rounds down. It does not mutate the input.
 func chopPrecisionAndTruncate(d *big.Int) {
-	d.Quo(d, precisionReuse)
+	d.Quo(d, PrecisionReuse())
 }
 
 func chopPrecisionAndTruncateNonMutative(d *big.Int) *big.Int {
@@ -708,7 +731,7 @@ func (d Dec) Ceil() Dec {
 	tmp := new(big.Int).Set(d.i)
 
 	quo, rem := tmp, big.NewInt(0)
-	quo, rem = quo.QuoRem(tmp, precisionReuse, rem)
+	quo, rem = quo.QuoRem(tmp, PrecisionReuse(), rem)
 
 	// no need to round with a zero remainder regardless of sign
 	if rem.Cmp(zeroInt) == 0 {

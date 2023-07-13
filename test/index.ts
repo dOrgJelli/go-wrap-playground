@@ -4,7 +4,7 @@ async function main() {
   const client = new PolywrapClient();
 
   const result = await client.invoke({
-    uri: "file/../build",
+    uri: "file/build",
     method: "calcPriceImpactWithAmount",
     args: {
       spotPriceBefore: "15345",

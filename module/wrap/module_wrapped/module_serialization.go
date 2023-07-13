@@ -2,10 +2,10 @@ package module_wrapped
 
 import (
 	. "example.com/go-wrap-test/module/wrap/types"
-	"github.com/polywrap/go-wrap/polywrap/msgpack"
+	"github.com/polywrap/go-wrap/msgpack"
 )
 
-func DeserializeCalcPriceImpactWithAmountArgs(argsBuf []byte) *MethodArgsCalcPriceImpactWithAmount {
+func DeserializeCalcPriceImpactWithAmountArgs(argsBuf []byte) *ArgsCalcPriceImpactWithAmount {
 	ctx := msgpack.NewContext("Deserializing module-type: CalcPriceImpactWithAmount")
 	reader := msgpack.NewReadDecoder(ctx, argsBuf)
 
@@ -51,7 +51,7 @@ func DeserializeCalcPriceImpactWithAmountArgs(argsBuf []byte) *MethodArgsCalcPri
 		panic(reader.Context().PrintWithContext("Missing required property: 'priceImpact: String'"))
 	}
 
-	return &MethodArgsCalcPriceImpactWithAmount{
+	return &ArgsCalcPriceImpactWithAmount{
 		SpotPriceBefore: _spotPriceBefore,
 		TokenAmount:     _tokenAmount,
 		PriceImpact:     _priceImpact,

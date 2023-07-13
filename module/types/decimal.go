@@ -9,7 +9,6 @@ import (
 	"strings"
 	"testing"
 )
-import wrap "github.com/polywrap/go-wrap/wrap"
 
 // NOTE: never use new(Dec) or else we will panic unmarshalling into the
 // nil embedded big.Int
@@ -291,10 +290,8 @@ func (d Dec) Mul(d2 Dec) Dec {
 
 // mutable multiplication
 func (d Dec) MulMut(d2 Dec) Dec {
-	wrap.WrapDebugLog(d.i.String())
 	d.i.Mul(d.i, d2.i)
 	chopped := chopPrecisionAndRound(d.i)
-	wrap.WrapDebugLog("chopPrecisionAndRound Working")
 
 	if chopped.BitLen() > maxDecBitLen {
 		panic("Int overflow")
@@ -611,29 +608,18 @@ func (d Dec) MustFloat64() float64 {
 //
 // Mutates the input. Use the non-mutative version if that is undesired
 func chopPrecisionAndRound(d *big.Int) *big.Int {
-	wrap.WrapDebugLog("Hello chopPrecisionAndRound")
 	// remove the negative and add it back when returning
 	if d.Sign() == -1 {
 		// make d positive, compute chopped value, and then un-mutate d
-		wrap.WrapDebugLog("chopPrecisionAndRound: d is negative")
 		d = d.Neg(d)
 		d = chopPrecisionAndRound(d)
 		d = d.Neg(d)
 		return d
 	}
 
-	wrap.WrapDebugLog("Hello QuoRem")
-
 	// get the truncated quotient and remainder
 	quo, rem := d, big.NewInt(0)
-	wrap.WrapDebugLog("Quo " + quo.String())
-	wrap.WrapDebugLog("Rem " + rem.String())
-	
-	wrap.WrapDebugLog(fmt.Sprintf("type of quo %T, d %T, rem %T, PrecisionReuse() %T", quo, d, rem, PrecisionReuse()))
-	wrap.WrapDebugLog(fmt.Sprintf("type of quo %s, d %s, rem %s, PrecisionReuse() %s", quo.String(), d.String(), rem.String(), PrecisionReuse().String()))
 	quo, rem = quo.QuoRem(d, PrecisionReuse(), rem)
-	wrap.WrapDebugLog("Quo " + quo.String())
-	wrap.WrapDebugLog("Rem " + rem.String())
 
 	if rem.Sign() == 0 { // remainder is zero
 		return quo

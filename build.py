@@ -29,10 +29,35 @@ def find_import_functions(wat_file):
 
     return import_functions
 
+def find_export_functions(wat_file):
+    export_functions = []
+
+    with open(wat_file, 'r') as f:
+        content = f.read()
+
+    pattern = r'\(export\s+"([^"]+)"'
+    matches = re.findall(pattern, content)
+    
+    for match in matches:
+        export = match
+        if export.startswith('asyncify') or export.startswith('_wrap'):
+            continue
+        export_functions.append(export)
+
+    return export_functions
+
 def snip_unwanted_imports(wasm_module_path , import_functions):
     if len(import_functions) == 0:
         return
     subprocess.run(['wasm-snip', wasm_module_path, '-o', wasm_module_path, '-p', *import_functions], check=True)
+
+def snip_unwanted_exports(wasm_module_path, export_functions):
+    if len(export_functions) == 0:
+        return
+    subprocess.run(['wasm-snip', wasm_module_path, '-o', wasm_module_path, *export_functions], check=True)
+
+def optimize_wasm(wasm_module_path):
+    subprocess.run(['wasm-opt', "-O4", wasm_module_path, '-o', wasm_module_path], check=True)
 
 def main():
     print("Building wasm module...")
@@ -47,9 +72,21 @@ def main():
     import_functions = find_import_functions(wat_file)
     print("Found unwanted import functions: ", import_functions)
 
+    print("Finding unwanted export functions...")
+    export_functions = find_export_functions(wat_file)
+    print("Found unwanted export functions: ", export_functions)
+
     print("Snipping unwanted import functions...")
     snip_unwanted_imports(wasm_module_path, import_functions)
-    print("Wasm module built at: ", wasm_module_path)
+    print("Snipped unwanted imports ", wasm_module_path)
+
+    print("Snipping unwanted export functions...")
+    snip_unwanted_exports(wasm_module_path, export_functions)
+    print("Snipped unwanted exports: ", wasm_module_path)
+
+    print("Optimizing wasm module...")
+    optimize_wasm(wasm_module_path)
+    print("Wasm module optimized: ", wasm_module_path)
 
     print("Removing wat file...")
     os.remove(wat_file)

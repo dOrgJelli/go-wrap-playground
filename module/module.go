@@ -6,25 +6,14 @@ import (
 )
 
 func CalcPriceImpactWithAmount(args *wrap.ArgsCalcPriceImpactWithAmount) string {
-	spotPriceBefore, errSPB := types.NewDecFromStr(args.SpotPriceBefore)
-	if errSPB != nil {
-		return errSPB.Error()
-	}
-	priceImpact, errPI := types.NewDecFromStr(args.PriceImpact)
-	if errPI != nil {
-		return errPI.Error()
-	}
+	spotPriceBefore, _ := types.NewDecFromStr(args.SpotPriceBefore)
+	priceImpact, _ := types.NewDecFromStr(args.PriceImpact)
 
 	// Not working for some reason
 	// one := types.NewDecFromInt(types.NewInt(1)) 
-
-	one, _ := types.NewDecFromStr("1")
-	newImpact := priceImpact.Add(one)
+	oneDec, _ := types.NewDecFromStr("1")
+	newImpact := priceImpact.Add(oneDec)
 	effectivePrice := newImpact.Mul(spotPriceBefore)
-
-  tokenAmount, errTA := types.NewDecFromStr(args.TokenAmount)
-	if errTA != nil {
-		return errTA.Error()
-	}
+  tokenAmount, _ := types.NewDecFromStr(args.TokenAmount)
 	return tokenAmount.Quo(effectivePrice).String()
 }

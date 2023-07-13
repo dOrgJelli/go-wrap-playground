@@ -1,11 +1,12 @@
-name: run-test-wrapper
-format: 0.2.0
+name: template-wasm-go
+format: 0.1.0
+# validation: "./polywrap.test.cue"
 jobs:
-  cases:
+  sampleMethod:
     steps:
-    - uri: file/./build
-      method: calcPriceImpactWithAmount
-      args:
-        spotPriceBefore: "15345"
-        tokenAmount: "53234223"
-        priceImpact: "12432"
+      - uri: fs/build
+        method: calcPriceImpactWithAmount
+        args:
+          spotPriceBefore: "15345"
+          tokenAmount: "53234223"
+          priceImpact: "12432"

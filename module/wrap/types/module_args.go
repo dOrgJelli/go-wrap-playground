@@ -1,7 +1,7 @@
 package types
 
-type MethodArgsCalcPriceImpactWithAmount struct {
-	SpotPriceBefore string
-	TokenAmount     string
-	PriceImpact     string
+type ArgsCalcPriceImpactWithAmount struct {
+	SpotPriceBefore string `json:"spotPriceBefore"`
+	TokenAmount     string `json:"tokenAmount"`
+	PriceImpact     string `json:"priceImpact"`
 }

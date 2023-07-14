@@ -24,4 +24,4 @@ The resulting wrap can be found in `./build`, where you'll find:
 * `wrap.info` - manifest & abi
 
 ## Test
-`yarn test` will run JavaScript-based tests, found within the `./module/__tests__/` directory.
+`yarn test` will run JavaScript-based tests, found within the [`./module/__tests__/`](./module/__tests__/) directory.

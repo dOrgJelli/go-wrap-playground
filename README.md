@@ -1,6 +1,6 @@
 # Osmosis Math Wrap (POC)
 
-The Osmosis Math wrap aims to bring the math libraries found within the Osmosis app-chain into front-end applications. It does this by compiling Golang into WebAssembly-based "wrap" using Polywrap.
+The Osmosis Math wrap aims to bring the math libraries found within the Osmosis app-chain into front-end applications. It does this by compiling Golang into a WebAssembly-based "wrap" using Polywrap.
 
 The schema for the wrap can be found in the [`polywrap.graphql`](./polywrap.graphql) file. The implementation of this schema can be found in the [`./module`](./module) directory. All bindings for the schema will be generated in the `./module/wrap` directory by the `polywrap build` and `polywrap codegen` commands. 
 

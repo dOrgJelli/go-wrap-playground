@@ -1,0 +1,8 @@
+format: 0.1.0
+stages:
+  ipfs_deploy:
+    package: ipfs
+    uri: file/./build
+    config:
+      gatewayUri: "https://ipfs.wrappers.io"
+https://wrap.link/i/ipfs/QmXCXYewGwutgLCGJu3ai2HP2oEmYcEbczjQMHtxjbUhLa/calcPriceImpactWithAmount?spotPriceBefore="15345"&tokenAmount="53234223"&priceImpact="12432"

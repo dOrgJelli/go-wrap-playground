@@ -1,41 +1,24 @@
 import { PolywrapClient } from "@polywrap/client-js";
-import { OsmoMath_Module } from "../types/wrap";
+import { OsmoMath_Module as OsmoMath } from "../types/wrap";
 import path from "path";
 
 jest.setTimeout(60000);
 
-describe("Template Wrapper End to End Tests", () => {
+describe("Osmosis Math End to End Tests", () => {
 
   const client: PolywrapClient = new PolywrapClient();
-  let wrapperUri: string;
+  const wrapUri = `file/${path.join(__dirname, "../../../build")}`;
 
-  beforeAll(() => {
-    const dirname: string = path.resolve(__dirname);
-    const wrapperPath: string = path.join(dirname, "..", "..", "..");
-    wrapperUri = `fs/${wrapperPath}/build`;
-  })
+  it("calcPriceImpactWithAmount", async () => {
 
-  it("calls sampleMethod", async () => {
-    const expected: string = "polywrap";
-
-    const result = await client.invoke({
-      uri: "file/build",
-      method: "calcPriceImpactWithAmount",
-      args: {
-        spotPriceBefore: "15345",
-        tokenAmount: "53234223",
-        priceImpact: "12432"
-      }
-    });
-
-    const result = await client.invoke<App.Template_SampleResult>({
-      uri: wrapperUri,
-      method: "sampleMethod",
-      args: { arg: expected }
-    });
+    const result = await OsmoMath.calcPriceImpactWithAmount({
+      spotPriceBefore: "15345",
+      tokenAmount: "53234223",
+      priceImpact: "12432"
+    }, client, wrapUri);
 
     expect(result.ok).toBeTruthy();
     if (!result.ok) return;
-    expect(result.value.result).toEqual(expected);
+    expect(result.value).toEqual("0.279028197197585117");
   });
 });

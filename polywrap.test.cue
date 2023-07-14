@@ -1,6 +1,6 @@
-package e2e
+package osmosis-math-tests
 
-sampleMethod: {
+calc: {
 		$0: {
 			data: {
 				value: "polywrap"

@@ -1,0 +1,9 @@
+format: 0.3.0
+project:
+  name: sample-typescript-type-generation
+  type: app/typescript
+source:
+  schema: ./schema.graphql
+  import_abis:
+    - uri: "github.com/osmosis-labs/osmosis-math-wrap"
+      abi: "../../../build/wrap.info"

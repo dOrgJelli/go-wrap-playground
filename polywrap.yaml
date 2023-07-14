@@ -1,7 +1,7 @@
 format: 0.4.0
 project:
-  name: ObjectTypes
+  name: osmosis-math
   type: wasm/golang
 source:
-  schema: ./schema.graphql
+  schema: ./polywrap.graphql
   module: ./go.mod

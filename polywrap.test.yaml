@@ -1,10 +1,10 @@
-name: template-wasm-go
+name: osmosis-math-tests
 format: 0.1.0
-# validation: "./polywrap.test.cue"
+validation: ./polywrap.test.cue
 jobs:
-  sampleMethod:
+  calc:
     steps:
-      - uri: fs/build
+      - uri: file/build
         method: calcPriceImpactWithAmount
         args:
           spotPriceBefore: "15345"

@@ -1,8 +1,8 @@
 package module
 
 import (
-	wrap "example.com/go-wrap-test/module/wrap/types"
-	types "example.com/go-wrap-test/module/types"
+	wrap "github.com/osmosis-labs/osmosis-math-wrap/module/wrap/types"
+	types "github.com/osmosis-labs/osmosis-math-wrap/module/types"
 )
 
 func CalcPriceImpactWithAmount(args *wrap.ArgsCalcPriceImpactWithAmount) string {

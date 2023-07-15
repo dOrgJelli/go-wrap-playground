@@ -1,5 +1,5 @@
 {
-  "name": "osmosis-math-wrap",
+  "name": "npm-scripts-and-deps",
   "private": true,
   "scripts": {
     "codegen": "npx polywrap codegen",

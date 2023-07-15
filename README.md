@@ -1,6 +1,6 @@
-# Osmosis Math Wrap (Demo)
+# Osmosis Math - For Apps (Demo)
 
-The Osmosis Math wrap aims to bring the math libraries found within the [Osmosis app-chain](https://github.com/osmosis-labs/cosmos-sdk) into front-end applications. It does this by compiling Golang into a WebAssembly-based "wrap" using Polywrap. This wrap can then be used within: TypeScript, JavaScript, Python, Rust, Swift, Kotlin, [...](https://github.com/polywrap/client-readiness)
+This project aims to bring the math libraries found within the [Osmosis app-chain](https://github.com/osmosis-labs/cosmos-sdk) into front-end applications. It does this by compiling Golang into a WebAssembly-based "wrap" using Polywrap. This wrap can then be used within applications written in: TypeScript, JavaScript, Python, Rust, Swift, Kotlin, [...](https://github.com/polywrap/client-readiness)
 
 What functionality does this wrap contain? The schema can be found in the [`polywrap.graphql`](./polywrap.graphql) file. The schema is implemented using [Go](./module).
 

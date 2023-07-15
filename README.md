@@ -1,27 +1,29 @@
-# Osmosis Math Wrap (POC)
+# Osmosis Math Wrap (Demo)
 
-The Osmosis Math wrap aims to bring the math libraries found within the Osmosis app-chain into front-end applications. It does this by compiling Golang into a WebAssembly-based "wrap" using Polywrap.
+The Osmosis Math wrap aims to bring the math libraries found within the [Osmosis app-chain](https://github.com/osmosis-labs/cosmos-sdk) into front-end applications. It does this by compiling Golang into a WebAssembly-based "wrap" using Polywrap. This wrap can then be used within: TypeScript, JavaScript, Python, Rust, Swift, Kotlin, [...](https://github.com/polywrap/client-readiness)
 
-The schema for the wrap can be found in the [`polywrap.graphql`](./polywrap.graphql) file. The implementation of this schema can be found in the [`./module`](./module) directory. All bindings for the schema will be generated in the `./module/wrap` directory by the `polywrap build` and `polywrap codegen` commands. 
+What functionality does this wrap contain? The schema can be found in the [`polywrap.graphql`](./polywrap.graphql) file. The schema is implemented using [Go](./module).
 
-## Pre-Requisites
-* `nvm` (Node Version Manager)
-* `yarn`
-* `docker`
-
-## Install
-1. Use correct version of node.js  
-> `nvm install && nvm use`
-
-2. Install `polywrap` CLI  
-> `yarn`
+The Go code is aware of all schema times through bindings in the [`./module/wrap`](./module/wrap) directory. This is done automatically by the `polywrap` CLI.
 
 ## Build
-`yarn build` or `npx polywrap build` both work. This will build your Go-based wrap within a docker build image.
+`npx polywrap build` or `yarn build`. This will build your Go-based wrap within a docker build image.
 
-The resulting wrap can be found in `./build`, where you'll find:
+The resulting wrap can be found in [`./build`](./build):
 * `wrap.wasm` - portable bytecode
 * `wrap.info` - manifest & abi
 
 ## Test
-`yarn test` will run JavaScript-based tests, found within the [`./module/__tests__/`](./module/__tests__/) directory.
+Tests are written in TypeScript [here](./module/__tests__/).
+
+Run all tests:
+> `yarn test`
+
+## Setup
+### Pre-Requisites
+* `node.js v18+`
+* `yarn`
+* `docker`
+
+### Run
+> `yarn install`

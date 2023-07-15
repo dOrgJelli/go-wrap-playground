@@ -1,3 +1,4 @@
+// FROM: https://github.com/osmosis-labs/cosmos-sdk/blob/osmosis-main/types
 package types
 
 import (
